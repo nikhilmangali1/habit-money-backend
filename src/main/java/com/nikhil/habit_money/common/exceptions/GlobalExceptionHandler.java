@@ -41,9 +41,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleBadCredentials(
             BadCredentialsException ex, HttpServletRequest request) {
         ApiErrorResponse response = new ApiErrorResponse(
-                Instant.now(), 403, "ACCESS_DENIED",
-                "Access denied", request.getRequestURI(), List.of());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+                Instant.now(), 401, "INVALID_CREDENTIALS",
+                "Invalid email or password", request.getRequestURI(), List.of());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(Exception.class)
@@ -53,14 +53,5 @@ public class GlobalExceptionHandler {
                 Instant.now(), 500, "INTERNAL_SERVER_ERROR",
                 "An unexpected error occurred", request.getRequestURI(), List.of());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
-
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ApiErrorResponse> handleValidationException(
-            ValidationException ex, HttpServletRequest request) {
-        ApiErrorResponse response = new ApiErrorResponse(
-                Instant.now(), ex.getHttpStatus().value(), ex.getErrorCode(),
-                ex.getMessage(), request.getRequestURI(), List.of());
-        return ResponseEntity.status(ex.getHttpStatus()).body(response);
     }
 }

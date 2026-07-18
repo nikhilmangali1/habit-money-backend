@@ -3,6 +3,7 @@ package com.nikhil.habit_money.auth.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class JwtService {
 
     private final SecretKey key;
@@ -59,6 +61,7 @@ public class JwtService {
             extractClaims(token);
             return true;
         } catch (Exception e) {
+            log.debug("JWT validation failed: {}", e.getMessage());
             return false;
         }
     }

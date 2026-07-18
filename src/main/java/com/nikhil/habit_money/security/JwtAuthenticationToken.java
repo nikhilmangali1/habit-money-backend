@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
+    private static final long serialVersionUID = 1L;
+
     private final UUID userId;
     private final String userRole;
 
@@ -20,7 +22,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return "";
     }
 
     @Override
