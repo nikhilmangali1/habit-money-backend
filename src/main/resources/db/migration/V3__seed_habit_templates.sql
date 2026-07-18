@@ -1,0 +1,31 @@
+INSERT INTO categories (id, name, type, icon, is_predefined) VALUES
+    ('a0000000-0000-0000-0000-000000000001', 'Health', 'HABIT', 'health', TRUE),
+    ('a0000000-0000-0000-0000-000000000002', 'Fitness', 'HABIT', 'fitness', TRUE),
+    ('a0000000-0000-0000-0000-000000000003', 'Mindfulness', 'HABIT', 'mindfulness', TRUE),
+    ('a0000000-0000-0000-0000-000000000004', 'Productivity', 'HABIT', 'productivity', TRUE),
+    ('a0000000-0000-0000-0000-000000000005', 'Learning', 'HABIT', 'learning', TRUE),
+    ('a0000000-0000-0000-0000-000000000006', 'Finance', 'HABIT', 'finance', TRUE),
+    ('a0000000-0000-0000-0000-000000000007', 'Social', 'HABIT', 'social', TRUE),
+    ('a0000000-0000-0000-0000-000000000008', 'Lifestyle', 'HABIT', 'lifestyle', TRUE);
+
+INSERT INTO habit_templates (id, title, description, category_id, frequency, icon) VALUES
+    ('b0000000-0000-0000-0000-000000000001', 'Morning Run', 'Run for 30 minutes every morning',
+     'a0000000-0000-0000-0000-000000000002', 'DAILY', 'run'),
+    ('b0000000-0000-0000-0000-000000000002', 'Read 20 Pages', 'Read 20 pages of a book daily',
+     'a0000000-0000-0000-0000-000000000005', 'DAILY', 'book'),
+    ('b0000000-0000-0000-0000-000000000003', 'Meditate', 'Meditate for 10 minutes',
+     'a0000000-0000-0000-0000-000000000003', 'DAILY', 'meditate'),
+    ('b0000000-0000-0000-0000-000000000004', 'No Smoking', 'Avoid smoking for the day',
+     'a0000000-0000-0000-0000-000000000001', 'DAILY', 'no_smoke'),
+    ('b0000000-0000-0000-0000-000000000005', 'Drink 8 Glasses of Water', 'Stay hydrated throughout the day',
+     'a0000000-0000-0000-0000-000000000001', 'DAILY', 'water'),
+    ('b0000000-0000-0000-0000-000000000006', 'Gym Workout', 'Complete your gym workout routine',
+     'a0000000-0000-0000-0000-000000000002', 'DAILY', 'gym'),
+    ('b0000000-0000-0000-0000-000000000007', 'Learn a New Skill', 'Spend 30 minutes learning something new',
+     'a0000000-0000-0000-0000-000000000005', 'DAILY', 'skill'),
+    ('b0000000-0000-0000-0000-000000000008', 'Save Money', 'Set aside a fixed amount today',
+     'a0000000-0000-0000-0000-000000000006', 'DAILY', 'save'),
+    ('b0000000-0000-0000-0000-000000000009', 'Write in Journal', 'Write at least 100 words in your journal',
+     'a0000000-0000-0000-0000-000000000003', 'DAILY', 'journal'),
+    ('b0000000-0000-0000-0000-000000000010', 'Call a Friend', 'Call someone you care about',
+     'a0000000-0000-0000-0000-000000000007', 'DAILY', 'call');

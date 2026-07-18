@@ -19,6 +19,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final JwtService jwtService;
 
     @Override
@@ -28,16 +30,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         if (token != null && jwtService.isTokenValid(token)) {
-            Claims claims = jwtService.extractClaims(token);
-            String tokenType = claims.get("tokenType", String.class);
+            try {
+                Claims claims = jwtService.extractClaims(token);
+                String tokenType = claims.get("tokenType", String.class);
 
-            if ("ACCESS".equals(tokenType)) {
-                UUID userId = UUID.fromString(claims.getSubject());
-                String role = claims.get("role", String.class);
+                if ("ACCESS".equals(tokenType)) {
+                    UUID userId = UUID.fromString(claims.getSubject());
+                    String role = claims.get("role", String.class);
 
-                JwtAuthenticationToken authentication =
-                        new JwtAuthenticationToken(userId, role);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    JwtAuthenticationToken authentication =
+                            new JwtAuthenticationToken(userId, role);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception e) {
+                SecurityContextHolder.clearContext();
             }
         }
 
@@ -46,8 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }
