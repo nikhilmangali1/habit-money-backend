@@ -8,3 +8,5 @@ spring:
 app:
   jwt:
     secret: ${DEV_JWT_SECRET}
+  google:
+    client-id: ${DEV_GOOGLE_CLIENT_ID}
