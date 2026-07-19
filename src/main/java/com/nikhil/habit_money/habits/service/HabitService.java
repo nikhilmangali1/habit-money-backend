@@ -218,6 +218,12 @@ public class HabitService {
     }
 
     @Transactional(readOnly = true)
+    public HabitSummaryResponse getDailySummary() {
+        LocalDate today = LocalDate.now();
+        return computeSummary(today, today, "Daily");
+    }
+
+    @Transactional(readOnly = true)
     public HabitSummaryResponse getWeeklySummary() {
         UUID userId = currentUser.getUserId();
         LocalDate endDate = LocalDate.now();
@@ -252,8 +258,17 @@ public class HabitService {
         long completed = logs.stream().filter(l -> l.getStatus() == LogStatus.COMPLETED).count();
         long missed = logs.stream().filter(l -> l.getStatus() == LogStatus.MISSED).count();
         long skipped = logs.stream().filter(l -> l.getStatus() == LogStatus.SKIPPED).count();
-        long total = completed + missed + skipped;
-        double rate = total > 0 ? (double) completed / total * 100 : 0;
+
+        int daysInPeriod = (int) ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        long expected = 0;
+        for (HabitEntity habit : habits) {
+            switch (habit.getFrequency()) {
+                case DAILY:   expected += daysInPeriod; break;
+                case WEEKLY:  expected += (int) Math.ceil((double) daysInPeriod / 7); break;
+                case MONTHLY: expected += (int) Math.ceil((double) daysInPeriod / 30); break;
+            }
+        }
+        double rate = expected > 0 ? (double) completed / expected * 100 : 0;
 
         int bestStreak = habits.stream().mapToInt(HabitEntity::getBestStreak).max().orElse(0);
         int currentStreak = habits.stream().mapToInt(HabitEntity::getStreakCount).max().orElse(0);

@@ -84,6 +84,11 @@ public class HabitController {
         return ResponseEntity.ok(habitService.getHabitLogs(id, startDate, endDate));
     }
 
+    @GetMapping("/summary/daily")
+    public ResponseEntity<HabitSummaryResponse> getDailySummary() {
+        return ResponseEntity.ok(habitService.getDailySummary());
+    }
+
     @GetMapping("/summary/weekly")
     public ResponseEntity<HabitSummaryResponse> getWeeklySummary() {
         return ResponseEntity.ok(habitService.getWeeklySummary());

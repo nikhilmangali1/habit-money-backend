@@ -29,21 +29,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
 
-        if (token != null && jwtService.isTokenValid(token)) {
-            try {
-                Claims claims = jwtService.extractClaims(token);
-                String tokenType = claims.get("tokenType", String.class);
+        if (token != null) {
+            if (jwtService.isTokenValid(token)) {
+                try {
+                    Claims claims = jwtService.extractClaims(token);
+                    String tokenType = claims.get("tokenType", String.class);
 
-                if ("ACCESS".equals(tokenType)) {
-                    UUID userId = UUID.fromString(claims.getSubject());
-                    String role = claims.get("role", String.class);
+                    if ("ACCESS".equals(tokenType)) {
+                        UUID userId = UUID.fromString(claims.getSubject());
+                        String role = claims.get("role", String.class);
 
-                    JwtAuthenticationToken authentication =
-                            new JwtAuthenticationToken(userId, role);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                        JwtAuthenticationToken authentication =
+                                new JwtAuthenticationToken(userId, role);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                } catch (Exception e) {
+                    SecurityContextHolder.clearContext();
                 }
-            } catch (Exception e) {
-                SecurityContextHolder.clearContext();
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\":\"Token expired or invalid\",\"status\":401}");
+                return;
             }
         }
 
