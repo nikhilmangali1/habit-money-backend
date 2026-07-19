@@ -71,7 +71,7 @@ public class AuthService {
                 .orElseThrow(() -> new ValidationException("Invalid email or password"));
 
         if (user.getAuthProvider() == AuthProvider.GOOGLE) {
-            throw new ValidationException("This email is registered with Google. Please sign in with Google.");
+            throw new ValidationException("This account uses Google Sign-In. Please sign in with Google.");
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
@@ -109,8 +109,6 @@ public class AuthService {
                     .updatedAt(LocalDateTime.now())
                     .build();
             userRepository.save(user);
-        } else if (user.getAuthProvider() == AuthProvider.EMAIL) {
-            throw new ValidationException("This email is registered with email/password. Please login with email.");
         }
 
         return generateAuthResponse(user);
